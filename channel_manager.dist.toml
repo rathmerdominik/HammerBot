@@ -1,0 +1,18 @@
+# This module updates or generates channels and categorys based on the structure you define
+
+guild_to_manage = 0        # The guild the bot is intended to manage Leave empty to disable module
+channel_for_welcome = 0    # The channel id to post the welcome message in. 
+message_id_for_welcome = 0 # The message id for the welcome text. Keep empty if you want it to be auto generated
+enable_server_nuke = false # Enable the clear_all_channels command to remove EVERY channel and category on the server
+#                
+# 
+[categories]
+# Place tables with category names here e.g
+#
+# [categories.GENERAL]              
+# emoji_assign = 1000539681152323644                    # The emoji that will be offered as a role assignment reaction in the welcome text for this channel
+# description = "General stuff"                         # A description what the category offers
+#
+# [categories.GENERAL.channels]
+# general = "text"                                      # The channel names. Please choose "text", "voice" or "nsfw" to define the channel type. You can use "forum", "stage" and "announcement" when you enable the Community feature
+# voice-chat = "voice"                                  # Please know that discord moves voice channels at the bottom of the category by default and you can not do anything against it

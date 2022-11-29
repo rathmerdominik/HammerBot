@@ -1,0 +1,9 @@
+__pycache__
+
+.history
+.vscode
+
+venv
+
+channel_manager.toml
+config.toml

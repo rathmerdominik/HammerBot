@@ -1,0 +1,6 @@
+discord_api_key = "" # Your bot api key
+bot_owner_ids = []   # The IDs of the owner
+
+[logging]
+formatter = "%(asctime)s - %(levelname)s - %(module)s - %(message)s"
+level = "WARNING"
