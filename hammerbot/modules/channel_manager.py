@@ -142,7 +142,7 @@ class ChannelManager(Cog):
     async def assign_emojis(self, guild: Guild):
 
         channel = guild.get_channel(self.config.channel_for_welcome)
-
+        
         message: discord.Message = await channel.fetch_message(
             self.config.message_id_for_welcome
         )
@@ -280,29 +280,29 @@ class ChannelManager(Cog):
         guild: Guild = bot.get_guild(self.config.guild_to_manage)
 
         await self.create_channels(guild)
-        if self.config.message_id_for_welcome:
-            try:
-                channel = guild.get_channel(self.config.channel_for_welcome)
+        
+        try:
+            channel = guild.get_channel(self.config.channel_for_welcome)
 
-                message = await channel.fetch_message(
-                    self.config.message_id_for_welcome
-                )
-                await message.edit(embed=await self.build_welcome_message(guild))
+            message = await channel.fetch_message(
+                self.config.message_id_for_welcome
+            )
+            await message.edit(embed=await self.build_welcome_message(guild))
 
-            except AttributeError as e:
-                logger.error(
-                    f"Channel ID seems to be corrupted! Please check if the ID is still correct."
-                )
-                return
+        except AttributeError as e:
+            logger.error(
+                f"Channel ID seems to be corrupted! Please check if the ID is still correct."
+            )
+            return
 
-            except discord.HTTPException as e:
-                channel = guild.get_channel(self.config.channel_for_welcome)
-                message: discord.message.Message = await channel.send(
-                    embed=await self.build_welcome_message(guild)
-                )
+        except discord.HTTPException:
+            channel = guild.get_channel(self.config.channel_for_welcome)
+            message: discord.message.Message = await channel.send(
+                embed=await self.build_welcome_message(guild)
+            )
 
-                self.config.message_id_for_welcome = message.id
-                self.save_config()
+            self.config.message_id_for_welcome = message.id
+            self.save_config()
 
         await self.assign_emojis(guild)
         logger.info(f'Starting to monitor "{guild.name}"')
