@@ -15,9 +15,7 @@ if __name__ == "__main__":
         log_handler=log.setup_logging(
             level=config.logging.level, formatter=config.logging.formatter
         ).handlers[0],
-        log_formatter=log.generate_formatter(
-            formatter=config.logging.formatter
-        ),
+        log_formatter=log.generate_formatter(formatter=config.logging.formatter),
         log_level=config.logging.level,
-        root_logger=True
+        root_logger=True,
     )
