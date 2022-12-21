@@ -47,7 +47,7 @@ class Core(Cog):
             )
         try:
             await self.bot.unload_extension(
-                f"hammerbot.modules.{camel_to_snake(module)}"
+                f"hammerbot.modules.{camel_to_snake(module)}.{camel_to_snake(module)}"
             )
 
             logger.info(f"Disabled module {module}. Disabled by {ctx.author}")
@@ -61,7 +61,9 @@ class Core(Cog):
     async def enable_module(self, ctx: commands.context.Context, module: str) -> None:
 
         try:
-            await self.bot.load_extension(f"hammerbot.modules.{camel_to_snake(module)}")
+            await self.bot.load_extension(
+                f"hammerbot.modules.{camel_to_snake(module)}.{camel_to_snake(module)}"
+            )
         except commands.errors.ExtensionNotFound as e:
             logger.info(e)
             await ctx.send("Extension does not exist", ephemeral=True)
