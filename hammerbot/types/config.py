@@ -10,4 +10,5 @@ class Logging(BaseModel):
 class Config(BaseModel):
     discord_api_key: str
     bot_owner_ids: List[int]
+    command_prefix: str
     logging: Logging

@@ -44,7 +44,9 @@ class HammerBot(commands.Bot):
         intents.message_content = True
         intents.members = True
 
-        super().__init__("!", intents=intents, owner_ids=config.bot_owner_ids)
+        super().__init__(
+            config.command_prefix, intents=intents, owner_ids=config.bot_owner_ids
+        )
 
     async def setup_hook(self) -> None:
 
