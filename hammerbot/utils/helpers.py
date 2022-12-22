@@ -34,19 +34,3 @@ def camel_to_snake(text: str) -> str:
         str: the converted text
     """
     return re.sub(r"(?<!^)(?=[A-Z])", "_", text).lower()
-
-
-def generate_uuid_from_int_list(int_list: List[int]) -> UUID:
-
-    hex_list = []
-
-    for i in int_list:
-        if i < 0:
-            i = i + 2**32
-        print(hex(i)[2:])
-        hex_list.append(hex(i)[2:])
-
-    return UUID("".join(hex_list))
-
-
-print(generate_uuid_from_int_list([-40106919, 1701661571, -1858771250, -1113751207]))
