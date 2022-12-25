@@ -4,7 +4,9 @@ from discord import Embed
 from discord.ext import commands
 from discord.ext.commands import Cog, Bot
 
-from hammerbot.utils.helpers import camel_to_snake
+from .utils import db
+from .utils.helpers import camel_to_snake
+
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +33,7 @@ class Core(Cog):
             if cog in available_cogs:
                 embed.add_field(name=f"{cog}", value=f"{loaded}", inline=False)
             else:
-                embed.add_field(naqme=f"{cog} ", value=f"{unloaded}", inline=False)
+                embed.add_field(name=f"{cog} ", value=f"{unloaded}", inline=False)
 
         await ctx.send(ephemeral=True, embed=embed)
 
@@ -42,13 +44,14 @@ class Core(Cog):
         if camel_to_snake(module) == "core":
             logger.warning(f"Disabled core module. Disabled by {ctx.author}")
             await ctx.send(
-                "Disabling the core module leads to a loss of module control. Please use /restart_bot to regain normal functionality",
+                "Disabling the core module leads to a loss of module control and is not recommended!\nYou will have to delete the database file or change 'enabled' to True for the Core module",
                 ephemeral=True,
             )
         try:
             await self.bot.unload_extension(
                 f"hammerbot.modules.{camel_to_snake(module)}.{camel_to_snake(module)}"
             )
+            db.insert_module(camel_to_snake(module), enabled=False)
 
             logger.info(f"Disabled module {module}. Disabled by {ctx.author}")
             await ctx.send(f"Disabled Module: {module}", ephemeral=True)
@@ -64,6 +67,8 @@ class Core(Cog):
             await self.bot.load_extension(
                 f"hammerbot.modules.{camel_to_snake(module)}.{camel_to_snake(module)}"
             )
+            db.insert_module(camel_to_snake(module), enabled=True)
+
         except commands.errors.ExtensionNotFound as e:
             logger.info(e)
             await ctx.send("Extension does not exist", ephemeral=True)
@@ -105,7 +110,27 @@ class Core(Cog):
             f"Command Tree synced! Found {len(fmt)} commands!", ephemeral=True
         )
 
+    @commands.Cog.listener()
+    async def on_ready(self) -> None:
+        for cog in list(self.bot.cogs.keys()):
+            module = db.get_module(camel_to_snake(cog))
+
+            logger.debug(module)
+            if module == None:
+                db.insert_module(camel_to_snake(cog))
+                continue
+
+            if not module.enabled:
+
+                await self.bot.unload_extension(
+                    f"hammerbot.modules.{camel_to_snake(module.name)}.{camel_to_snake(module.name)}"
+                )
+
 
 async def setup(bot: commands.Bot):
     logger.info("Core Module locked and loaded!")
     await bot.add_cog(Core(bot))
+
+
+async def teardown(bot: commands.Bot):
+    logger.info("Core Module unloaded!")

@@ -4,6 +4,11 @@ __pycache__
 .vscode
 
 venv
+hammerbot/modules/*
+!hammerbot/modules/core/
 
 channel_manager.toml
 config.toml
+hammerbot/modules/core/core.toml
+
+hammerbot.db

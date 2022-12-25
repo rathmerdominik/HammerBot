@@ -1,6 +1,6 @@
 import logging
 
-from hammerbot.utils import helpers
+from . import helpers
 
 
 def setup_logging_from_config() -> logging.Logger:
@@ -31,15 +31,16 @@ def setup_logging(
     formatter = generate_formatter(formatter)
 
     handler = logging.StreamHandler()
-    
+
     handler.setFormatter(formatter)
-    
+
     logger.addHandler(handler)
 
     level = logging.getLevelName(level)
     logger.setLevel(level)
 
     return logger
+
 
 def generate_formatter(formatter: str = None) -> logging.Formatter:
     """Helper function to generate a formatter based on a standard string or on a given string
@@ -55,9 +56,6 @@ def generate_formatter(formatter: str = None) -> logging.Formatter:
             fmt="%(asctime)s - %(levelname)s - %(module)s - %(message)s"
         )
     else:
-        formatter = logging.Formatter(
-            fmt=formatter
-        )
-    
-    return formatter
+        formatter = logging.Formatter(fmt=formatter)
 
+    return formatter

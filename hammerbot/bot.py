@@ -10,7 +10,10 @@ from glob import glob
 from discord import Intents
 from discord.ext import commands
 
-from hammerbot.types.config import Config
+from collections import Counter
+
+from .types.config import Config
+
 
 logger = logging.getLogger(__name__)
 
@@ -64,14 +67,17 @@ class HammerBot(commands.Bot):
         extension_dir = path.dirname(__file__) + "/modules"
 
         subfolders = [f.path for f in os.scandir(extension_dir) if f.is_dir()]
+
         for folder in subfolders:
-            print(folder)
 
             base_folder_name = os.path.basename(os.path.normpath(folder))
 
+            if base_folder_name == "__pycache__":
+                continue
+
             if not glob(f"{folder}/{base_folder_name}.py"):
                 logger.warn(
-                    f"Module {base_folder_name} has no entry file! Please make sure that the entry file has the same name as the parent directory. Skipping this module!"
+                    f'Module "{base_folder_name}" has no entry file! Please make sure that the entry file has the same name as the parent directory. Skipping this module!'
                 )
                 continue
 

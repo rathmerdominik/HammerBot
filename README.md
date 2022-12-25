@@ -25,7 +25,7 @@ Before you start the bot you have to put your Discord API token inside the `conf
 
 You will also have to put owner IDs in there. Normally that would be your discord ID or the IDs of your staff.
 
-You can also configure the warning log level inside there as well with [these](https://docs.python.org/3/library/logging.html#logging-levels) values 
+It is also possible to configure the warning log level inside the config file with [these](https://docs.python.org/3/library/logging.html#logging-levels) values 
 
 In case you need a different log formatting you can use [these](https://docs.python.org/3/library/logging.html#logging-levels) formatting options in the config
 
@@ -35,31 +35,61 @@ In case you need a different log formatting you can use [these](https://docs.pyt
 
 **If** the Plugin developer did everything right it is as easy as just putting the folder into the `hammerbot/modules` directory and starting the bot with `python app.py`
 
-As a developer you can use the `core` module as a guideline how the entrypoint has to look like. 
-
-It is **imperative** to use the same name for the entry point file as you did for the folder else the program will exit with a warning that the file could not be loaded. 
-
-You are allowed to put any other file you wish inside your project e.g config files or similiar necesseties as long as the entry file exists
 
 ---
 ## **Usable commands**
 
 *All commands work as slash commands when registered and synced with the command tree*
-### HBF already comes with a set of pre-installed commands.
+### HDF already comes with a set of pre-installed commands.
 
 `restart_bot # Restart the entire bot process`
 
 `close_bot # Closes the entire bot process`
 
-### HBF also has the `core` module pre-packaged. This can be disabled or entirely removed but I recommend not to do that
+---
+## **The Core Module**
+
+### HDF also has the `core` module pre-packaged. This can be disabled or entirely removed if desired so
+
+To use the module you have to change the name from the config file `core.dist.toml` to `core.toml` and set your desired database path or leave it at default
 
 ### These commands are included in the core module
 `get_all_modules # Prints all modules that were found`
 
-`disable_module <module> # Disables a module for the current bot session`
+`disable_module <module> # Disables a module persistently`
 
-`enable_module <module> # Enables a module`
+`enable_module <module> # Enables a module persistently`
 
 `reload_module <module> # Reloads a module. Useful for development`
 
 `sync # Syncs all commands to the command tree and therefore allows slash commands to be used`
+
+
+---
+## **Plugin development**
+
+As a developer you can use the `core` module as a guideline how the entrypoint has to look like. 
+
+It is **imperative** to use the same name for the entry point file as you did for the folder else the program will exit with a warning that the file could not be loaded. 
+
+You can use either `CamelCase` or `snake_case` for file and folder names. I heavily recommend to use snake case as this is a python standard.
+
+### Logging
+
+If you need logging you can put the following lines in your python file
+
+```python
+import logging
+
+logger = logging.getLogger(__name__)
+```
+
+This allows you to use the global Logger to log events
+
+---
+
+## **TODO**
+
+- [ ] Implement module self-update logic
+- [ ] Test suite
+

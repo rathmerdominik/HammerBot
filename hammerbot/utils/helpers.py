@@ -1,8 +1,5 @@
-import re
 import os
 import toml
-
-from uuid import uuid4, UUID
 
 from typing import List
 
@@ -22,15 +19,3 @@ def load_config() -> Config:
         config: Config = Config(**config)
 
     return config
-
-
-def camel_to_snake(text: str) -> str:
-    """Converts camel to snake case
-
-    Args:
-        text (str): text to convert
-
-    Returns:
-        str: the converted text
-    """
-    return re.sub(r"(?<!^)(?=[A-Z])", "_", text).lower()
