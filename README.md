@@ -86,6 +86,12 @@ logger = logging.getLogger(__name__)
 
 This allows you to use the global Logger to log events
 
+## Dependencies
+
+If you need to add extra dependencies you can simply create a `requirements.txt` file inside your project root.
+
+The Bot will recognize this and install all the dependencies inside it
+
 ---
 
 ## **TODO**

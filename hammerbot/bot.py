@@ -1,5 +1,6 @@
 import sys
 import logging
+import subprocess
 
 import os
 from os import listdir
@@ -83,6 +84,29 @@ class HammerBot(commands.Bot):
 
             for file in listdir(folder):
                 logger.debug(file)
+                try:
+                    if file == "requirements.txt":
+                        raw_output = subprocess.check_output(
+                            [
+                                sys.executable,
+                                "-m",
+                                "pip",
+                                "install",
+                                "-r",
+                                f"{folder}/{file}",
+                            ],
+                        )
+                        output = str(raw_output)[2:-3].split("\\n")
+
+                        for out in output:
+                            logger.debug(out)
+
+                except subprocess.CalledProcessError as e:
+                    logger.error(e)
+                    logger.warn(
+                        f'Module "{base_folder_name}"  has been skipped! There is a broken requirements.txt file inside it'
+                    )
+                    continue
 
                 if file == f"{base_folder_name}.py":
                     logger.debug(file)
