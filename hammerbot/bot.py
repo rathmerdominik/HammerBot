@@ -116,10 +116,19 @@ class HammerBot(commands.Bot):
                         await self.load_extension(
                             f"hammerbot.modules.{file[:-3]}.{file[:-3]}"
                         )
+                    except commands.errors.ExtensionFailed as e:
+                        logger.error(
+                            f"Plugin '{base_folder_name}' could not be loaded. Error message: {e}!"
+                        )
+
                     except commands.NoEntryPointError:
-                        logger.exception("Plugin has a broken entry hook!")
+                        logger.error(
+                            f"Plugin '{base_folder_name}' has a broken entry hook!"
+                        )
                     except Exception as e:
-                        logger.exception(e)
+                        logger.exception(
+                            f"Exception found that has not been handled, yet. Please report here: {e}"
+                        )
 
         logger.info("All modules loaded")
 

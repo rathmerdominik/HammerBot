@@ -19,3 +19,16 @@ def load_config() -> Config:
         config: Config = Config(**config)
 
     return config
+
+
+def write_config(config: Config) -> None:
+    """Saves HammerBots config in its toml file
+
+    Args:
+        config (Config): config object
+    """
+    root = os.path.join(os.path.dirname(__file__), "../..")
+
+    with open(f"{root}/config.toml", "w") as f:
+        config = config.dict()
+        toml.dump(config, f)
