@@ -112,19 +112,24 @@ class Core(Cog):
 
     @commands.Cog.listener()
     async def on_ready(self) -> None:
-        for cog in list(self.bot.cogs.keys()):
-            module = db.get_module(camel_to_snake(cog))
+        try:
+            for cog in list(self.bot.cogs.keys()):
+                module = db.get_module(camel_to_snake(cog))
 
-            logger.debug(module)
-            if module == None:
-                db.insert_module(camel_to_snake(cog))
-                continue
+                logger.debug(module)
+                if module == None:
+                    db.insert_module(camel_to_snake(cog))
+                    continue
 
-            if not module.enabled:
+                if not module.enabled:
 
-                await self.bot.unload_extension(
-                    f"hammerbot.modules.{camel_to_snake(module.name)}.{camel_to_snake(module.name)}"
-                )
+                    await self.bot.unload_extension(
+                        f"hammerbot.modules.{camel_to_snake(module.name)}.{camel_to_snake(module.name)}"
+                    )
+        except FileNotFoundError:
+            logger.error(
+                "core.toml does not exist! Please make sure that you created it out of the config.dist.toml file"
+            )
 
 
 async def setup(bot: commands.Bot):
